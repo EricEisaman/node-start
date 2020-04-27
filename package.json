@@ -1,0 +1,26 @@
+{
+  "name": "node-start",
+  "version": "0.0.1",
+  "description": "A template for starting Node apps.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io":"^2.3.0",
+    "sqlite3": "^4.1.1"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/node-start"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "socket.io",
+    "express"
+  ]
+}
