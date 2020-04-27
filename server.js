@@ -1,7 +1,7 @@
-let express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 require('./io.js')(io);
 app.use(express.static('public'));
 app.get('/', function(request, response) {
