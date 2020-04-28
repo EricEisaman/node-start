@@ -8,16 +8,46 @@
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
+    <div>
+      <input id="name-input" placeholder="Enter your chosen name.">
+      <button id="name-btn">Submit Name</button>
+    </div>
+    <div>
+      <h3>Names</h3>
+      <ul id="names-list"></ul>
+    </div>
     <div id="msg"></div>
     <script>
-      var msg = document.getElementById("msg");
-      var socket = io();
+      const socket = io();
+      const msg = document.getElementById("msg");
+      const nameInput = document.getElementById("name-input");
+      const nameBtn = document.getElementById("name-btn");
+      const namesList = document.getElementById("names-list");
+      nameBtn.addEventListener('click', e=>{
+        socket.emit('set-name', nameInput.value);
+        nameInput.value = '';
+      });
+      socket.on("update-name",data=>{
+        const listItem = document.getElementById(data.id);
+        const me = (socket.id===data.id);
+        if(listItem){
+          if(me) listItem.innerHTML = `id: ${data.id}   name: <em>${data.name}</em>`;
+          else listItem.innerHTML = `id: ${data.id}   name: ${data.name}`;
+        }
+        else{
+          if(me)
+            namesList.innerHTML += `<li id=${data.id}>id: ${data.id}   name: <em>${data.name}</em></li>`;
+          else
+            namesList.innerHTML += `<li id=${data.id}>id: ${data.id}   name: ${data.name}</li>`;
+        }
+      });
       socket.on("connect", () => {
         console.log("My Socket ID: ", socket.id);
       });
       socket.on("msg", data => {
         msg.innerHTML = data;
       });
+      
     </script>
     <script src="main.js"></script>
   </body>

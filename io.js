@@ -1,5 +1,5 @@
 module.exports = (io)=>{
-  var players = {};
+  let players = {};
   io.on('connection',socket=>{
     console.log('New Socket with ID: ',socket.id);
     socket.ip = socket.handshake.headers['x-forwarded-for'];
@@ -9,10 +9,20 @@ module.exports = (io)=>{
     }else{
       io.emit('msg','Welcome to the server!<br>Your IP: UNKNOWN');
     }
-    players[socket.id] = {};
+    players[socket.id] = {name:'ANONYMOUS'};
     socket.on('disconnect',()=>{
       console.log(`User with id: ${socket.id} disconnected.`);
       delete players[socket.id];
     })
-  });
+    socket.on('echo',data=>{
+      io.emit('msg', data);
+    })
+    socket.on('private-echo',data=>{
+      socket.emit('msg', data);
+    })
+    socket.on('set-name', name=>{
+      players[socket.id] = name;
+      io.emit('update-name', { id:socket.id , name: name} );
+    })
+    });
 }
