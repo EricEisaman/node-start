@@ -5,13 +5,22 @@ module.exports = (io)=>{
     socket.ip = socket.handshake.headers['x-forwarded-for'];
     if(socket.ip){
       socket.ipStore = socket.ip.split(',')[0].replace(/\./g, "_");
-      io.emit('msg',`Welcome to the server!<br>Your IP: ${socket.ip.split(',')[0]}`);
+      socket.emit('msg',`Welcome to the server!<br>Your IP: ${socket.ip.split(',')[0]}`);
     }else{
-      io.emit('msg','Welcome to the server!<br>Your IP: UNKNOWN');
+      socket.emit('msg','Welcome to the server!<br>Your IP: UNKNOWN');
     }
     players[socket.id] = {name:'ANONYMOUS'};
+    if(Object.keys(players)){
+      let p = [];
+      Object.keys(players).forEach(id=>{
+        p.push({id:id , name:players[id].name});
+      });
+      socket.emit('current-players',p);
+      socket.broadcast.emit('update-name',{id:socket.id , name:players[socket.id].name});
+    }
     socket.on('disconnect',()=>{
       console.log(`User with id: ${socket.id} disconnected.`);
+      io.emit('remove-player', socket.id );
       delete players[socket.id];
     })
     socket.on('echo',data=>{
