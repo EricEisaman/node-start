@@ -13,6 +13,11 @@
       <button id="name-btn">Submit Name</button>
     </div>
     <div>
+      <input id="id-input" placeholder="ID of recipient.">
+      <input id="msg-input" placeholder="Message to send.">
+      <button id="send-msg-btn">Send Message</button>
+    </div>
+    <div>
       <h3>Names</h3>
       <ul id="names-list"></ul>
     </div>
@@ -23,6 +28,12 @@
       const nameInput = document.getElementById("name-input");
       const nameBtn = document.getElementById("name-btn");
       const namesList = document.getElementById("names-list");
+      const sendMsgBtn = document.getElementById("send-msg-btn");
+      const msgInput = document.getElementById("msg-input");
+      const idInput = document.getElementById("id-input");
+      sendMsgBtn.addEventListener('click', e=>{
+        socket.emit('send-msg',{id:idInput.value , msg:msgInput.value});
+      });
       nameBtn.addEventListener('click', e=>{
         socket.emit('set-name', nameInput.value);
         nameInput.value = '';

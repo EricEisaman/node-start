@@ -24,5 +24,8 @@ module.exports = (io)=>{
       players[socket.id] = name;
       io.emit('update-name', { id:socket.id , name: name} );
     })
+    socket.on('send-msg', data=>{
+      io.to(data.id).emit('msg', data.msg);
+    })
     });
 }
