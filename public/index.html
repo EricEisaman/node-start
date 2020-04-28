@@ -33,6 +33,7 @@
       const idInput = document.getElementById("id-input");
       sendMsgBtn.addEventListener('click', e=>{
         socket.emit('send-msg',{id:idInput.value , msg:msgInput.value});
+        msgInput.value = '';
       });
       nameBtn.addEventListener('click', e=>{
         socket.emit('set-name', nameInput.value);
